@@ -14,61 +14,41 @@ func main() {
 		fmt.Scan(&m)
 		fmt.Scanln(&n)
 
-		//fmt.Println(m, n)
+		primesInRange(m, n)
 
-		if conditionSatisfied(m, n) {
-
-			primesInRange(m, n)
-		}
 		fmt.Println()
 	}
 }
 
 func primesInRange(m int64, n int64) {
 
-	for i := m; i <= n; i++ {
+	// using the sieve of eratosthenes
 
-		if i == 2 || i == 3 {
+	//create map of consecutive integers from 2 to n setting marked to false (by default)
+	nonPrimes := make(map[int64]bool, n)
 
-			fmt.Println(i)
-			continue
-		}
+	// set p to the first prime number i.e. 2
+	for p := int64(2); p * p <= n; p++ {
 
-		if i == 1 || i % 2 == 0 {
-			continue
-		}
+		// mark off all numbers while counting up in increments of p
+		// check if marked is false
+		if !nonPrimes[p] {
 
-		isPrime := true
+			// this number hasn't been marked, update the multiples starting from p * 2
+			for j := p * 2; j <= n; j += p {
 
-		for j := int64(2); j < i; j++ {
-
-			if i % j == 0 {
-
-				isPrime = false
-				break
+				nonPrimes[j] = true
+				// multiple has been marked
 			}
 		}
+	}
 
-		if isPrime {
-			fmt.Println(i)
+	for num := m; num <= n; num++ {
+
+		if num < 2 || nonPrimes[num]{
+			continue
 		}
-
-	}
-}
-
-func conditionSatisfied(m, n int64) bool {
-
-	if m > n {
-		return false
+		fmt.Println(num)
 	}
 
-	if n > 1000000000 {
-		return false
-	}
-
-	if n - m > 100000 {
-		return false
-	}
-
-	return true
 }
