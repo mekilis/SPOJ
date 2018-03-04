@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 
@@ -14,41 +16,43 @@ func main() {
 		fmt.Scan(&m)
 		fmt.Scanln(&n)
 
-		primesInRange(m, n)
+		for j := m; j <= n; j++ {
+
+			if isPrime(j) {
+
+				fmt.Println(j)
+			}
+		}
 
 		fmt.Println()
 	}
 }
 
-func primesInRange(m int64, n int64) {
+func isPrime(n int64) bool {
 
-	// using the sieve of eratosthenes
+	// Using AKS
+	if n == 2 || n == 3 {
 
-	//create map of consecutive integers from 2 to n setting marked to false (by default)
-	nonPrimes := make(map[int64]bool, n)
-
-	// set p to the first prime number i.e. 2
-	for p := int64(2); p * p <= n; p++ {
-
-		// mark off all numbers while counting up in increments of p
-		// check if marked is false
-		if !nonPrimes[p] {
-
-			// this number hasn't been marked, update the multiples starting from p * 2
-			for j := p * 2; j <= n; j += p {
-
-				nonPrimes[j] = true
-				// multiple has been marked
-			}
-		}
+		return true
 	}
 
-	for num := m; num <= n; num++ {
+	if n%2 == 0 || n%3 == 0 || n < 2 {
 
-		if num < 2 || nonPrimes[num]{
-			continue
-		}
-		fmt.Println(num)
+		return false
 	}
 
+	i, w := int64(5), int64(2)
+
+	for i*i <= n {
+
+		if n%i == 0 {
+
+			return false
+		}
+
+		i += w
+		w = 6 - w
+	}
+
+	return true
 }
