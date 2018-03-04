@@ -8,27 +8,25 @@ import "fmt"
 
 func main() {
 
-	factorial_large(100)
-}
+	var t, n int
+	fmt.Scan(&t)
 
-func factorial(n int64) int64 {
+	for tt := 0; tt < t; tt++ {
 
-	if n == 1 {
-		return n * 1
+		fmt.Scanln(&n)
+		factorial_large(n)
 	}
-
-	return n * factorial(n - 1)
 }
 
-func factorial_large(n int64) {
+func factorial_large(n int) {
 
 	// create array with maximum number of digits fixed at 200
-	res := make([]int64, 200)
+	res := make([]int, 200)
 
 	res[0] = 1
-	m := int64(1)
+	m := 1
 
-	for x := int64(2); x <= n; x++ {
+	for x := 2; x <= n; x++ {
 
 		m = multiply(x, res, m)
 	}
@@ -41,11 +39,11 @@ func factorial_large(n int64) {
 	fmt.Println()
 }
 
-func multiply(x int64, res []int64, size_res int64) int64 {
+func multiply(x int, res []int, size_res int) int {
 
-	carry := int64(0)
+	carry := 0
 
-	for i := int64(0); i < size_res; i++ {
+	for i := 0; i < size_res; i++ {
 
 		prod := res[i] * x + carry
 		res[i] = prod % 10
