@@ -35,46 +35,46 @@ func main() {
 			if c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c > '0' && c <= '9' {
 
 				// print out
-				fmt.Println("pushing", string(c), "to output")
+				//fmt.Println("pushing", string(c), "to output")
 				word = append(word, string(c))
 				continue
 
 			} else if c == '(' {
 
 				// push to stack
-				fmt.Println("pushing ( to stack")
+				//fmt.Println("pushing ( to stack")
 				stack = append(stack, string(c))
 				continue
 
 			} else if c == ')' {
 
-				fmt.Println(") found keep popping...")
+				//fmt.Println(") found keep popping...")
 
 				// keep popping from the stack until token is '('
 				for top := len(stack) - 1; top >= 0; top-- {
 
 					if stack[top] == string('(') {
 
-						fmt.Println("removing ( from stack")
+						//fmt.Println("removing ( from stack")
 						stack = append(stack[:top])
-						fmt.Println("after removing (", stack, top)
+						//fmt.Println("after removing (", stack, top)
 						break
 
 					} else {
 
-						fmt.Println("before (", word, stack, top)
+						//fmt.Println("before (", word, stack, top)
 
 						word = append(word, stack[top])
 						stack = append(stack[:top])
 
-						fmt.Println("after (", word, stack, top)
+						//fmt.Println("after (", word, stack, top)
 					}
 				}
 
 			} else {
 
 				// assumed to be other operators
-				fmt.Println("pushing operator", string(c))
+				//fmt.Println("pushing operator", string(c))
 
 				// while there is another operator at the top of the stack with a higher precedence
 				top := len(stack) - 1
@@ -83,7 +83,7 @@ func main() {
 
 					for operators[stack[top]] > c && top >= 0 {
 
-						fmt.Println("top at index", top)
+						//fmt.Println("top at index", top)
 
 						// pop this other operator
 						word = append(word, stack[top])
@@ -92,15 +92,20 @@ func main() {
 					}
 				}
 
-				// push cuurent operator to the top of the stack
+				// push current operator to the top of the stack
 				stack = append(stack, string(c))
 
 			}
 
-		} //(1+2)*(3/4)^(5+6) //((a+t)*((b+(a+c))^(c+d)))
+		} //(1+2)*(3/4)^(5+6) //((a+t)*((b+(a+c))^(c+d)))\
 
-		fmt.Println(word)
+		// pop out all chars in word
+		for _, c := range word {
+			fmt.Print(c)
+		}
+
+		fmt.Println()
 	}
 
-	fmt.Println(t, exp)
+	//fmt.Println(t, exp)
 }
