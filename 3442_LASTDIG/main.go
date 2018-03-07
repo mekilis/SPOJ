@@ -64,4 +64,4 @@ func main() {
 		fmt.Println(powerMatrix[a][key])
 	}
 
-}
+} // apparently solution was too long. might be the chart. solved in C++ 4.3.2 though in 0.0s with 2.8M used.
