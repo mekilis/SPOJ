@@ -78,18 +78,14 @@ func main() {
 				j += 1
 			}
 
-			//fmt.Println("final value of i and j", i, j)
-
 			var leftNum string
 			var bigSum = new(big.Int)
 
 			// has it crossed the boundary?
 			if (i < 0 && KArray[i + 1] == KArray[j - 1]) || KArray[i] < KArray[j] {
 				// it is a palindrome...
-				//fmt.Println("it's a palindrome or something else")
 				updateBigNum(leftNum, KStr, KArray, mid, l, bigSum)
 			} else {
-				//fmt.Println("it's no palindrome")
 				// good to go
 				for i := i; i >= 0; i-- {
 					KArray[l-i-1] = KArray[i]
@@ -107,11 +103,9 @@ func updateBigNum(leftNum, KStr string, KArray []string, mid, l int, bigSum *big
 		leftNum = KStr[:mid]
 	}
 
-	//fmt.Println("left num =", leftNum)
 	bigSum.SetString(leftNum, 10)
 	bigSum.Add(bigSum, big.NewInt(1))
 	leftNum = bigSum.String()
-	//fmt.Println("left sum is now", leftNum)
 
 	if l%2 != 0 {
 		KArray[mid] = string(leftNum[mid])
