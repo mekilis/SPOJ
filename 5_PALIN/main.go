@@ -23,7 +23,6 @@ func main() {
 		if !ok {
 			panic("wrong string representation of number")
 		}
-		done := false
 
 		//fmt.Println("This was entered:", K)
 		KStr := K.String()
@@ -40,54 +39,43 @@ func main() {
 		}
 
 		KArray := strings.Split(KStr, "")
-		// check if it's all 9s
-		l := int64(len(KArray))
-		divisor := new(big.Int)
-		divisor.Set(big.NewInt(l))
-		divisor.Exp(big.NewInt(10), divisor, nil)
-		divisor.Sub(divisor, big.NewInt(1))
-		//fmt.Println(divisor)
+		l := len(KArray)
 
-		if KStr == divisor.String() {
-			//fmt.Println("This number is all 9s")
-			divisor.Add(divisor, big.NewInt(2))
-			fmt.Println(divisor.String())
-			done = true
+		// check if it's all 9s
+		allnines := true
+
+		for _, c := range KArray {
+
+			if c != "9" {
+				//fmt.Println("not all nines")
+				allnines = false
+				break
+			}
 		}
 
-		if !done {
+		if allnines {
+			KArray = append(KArray, "1")
+			KArray[0] = "1"
+			for i := 1; i < l; i++ {
+				KArray[i] = "0"
+			}
+
+ 		} else {
 			// check if its already a palindrome
 			mid := l / 2
-			//left := KArray[:mid]
-			//right := KArray[mid:]
 
-			// assuming even array
-			i, j := mid-1, mid
+			// assuming odd array
+			i, j := mid, mid
 
-			// if odd
-			if l%2 != 0 {
+			// if even
+			if l%2 == 0 {
 				//right = KArray[mid+1:]
-				j = mid + 1
-			}
-			//fmt.Println("This is the breakdown", left, right)
-
-			// ignore parts of K where K[i] and K[j] are the same
-			k := int64(0)
-			for k = i; k >= 0; k-- {
-
-				ii, jj := k, l-k-1
-				if KArray[ii] != KArray[jj] {
-					break
-				}
-				// update i and j now
-				i, j = ii, jj
-
+				i = mid - 1
 			}
 
-			if k != i && i != 0 {
-				// update i and j to the next offset
-				i--
-				j++
+			for i >= 0 && KArray[i] == KArray[j] {
+				i -= 1
+				j += 1
 			}
 
 			//fmt.Println("final value of i and j", i, j)
@@ -96,32 +84,23 @@ func main() {
 			var bigSum = new(big.Int)
 
 			// has it crossed the boundary?
-			if i == 0 && KArray[i] == KArray[j] {
+			if (i < 0 && KArray[i + 1] == KArray[j - 1]) || KArray[i] < KArray[j] {
 				// it is a palindrome...
-				//fmt.Println("it's a palindrome")
+				//fmt.Println("it's a palindrome or something else")
 				updateBigNum(leftNum, KStr, KArray, mid, l, bigSum)
 			} else {
 				//fmt.Println("it's no palindrome")
-				// apparently K[i] != k[j]
-				if KArray[i] > KArray[j] {
-
-					// good to go
-					for i := i; i >= 0; i-- {
-						KArray[l-i-1] = KArray[i]
-					}
-				} else {
-					// little modification
-					updateBigNum(leftNum, KStr, KArray, mid, l, bigSum)
+				// good to go
+				for i := i; i >= 0; i-- {
+					KArray[l-i-1] = KArray[i]
 				}
 
 			}
-
-			fmt.Println(strings.Join(KArray, ""))
-
 		}
+		fmt.Println(strings.Join(KArray, ""))
 	}
 }
-func updateBigNum(leftNum, KStr string, KArray []string, mid, l int64, bigSum *big.Int) {
+func updateBigNum(leftNum, KStr string, KArray []string, mid, l int, bigSum *big.Int) {
 	if l%2 != 0 {
 		leftNum = KStr[:mid+1]
 	} else {
@@ -140,7 +119,7 @@ func updateBigNum(leftNum, KStr string, KArray []string, mid, l int64, bigSum *b
 		KArray[mid] = string(leftNum[mid-1])
 	}
 
-	for i := int64(0); i < l/2; i++ {
+	for i := 0; i < l/2; i++ {
 		KArray[i] = string(leftNum[i])
 		KArray[l-i-1] = KArray[i]
 	}
