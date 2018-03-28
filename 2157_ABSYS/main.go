@@ -21,11 +21,15 @@ func main() {
 	fmt.Scanln(&T)
 
 	for t := 0; t < T; t++ {
-		// blank
-		fmt.Scanln()
 
 		if scanner.Scan() {
 			line = scanner.Text()
+
+			for line == "" {
+				scanner.Scan()
+				line = scanner.Text()
+			}
+
 			p := strings.Split(line, " ")
 
 			augend, err1 = strconv.Atoi(p[0])
