@@ -17,7 +17,8 @@ func main() {
 						QUEUE
 	========|		| ==========
 			|		|
-			| STACK |
+			| STACK/|
+			| DEQUE |
 	*/
 
 	fmt.Scan(&N)
@@ -28,6 +29,11 @@ func main() {
 
 		for n := 1; n <= N; n++ {
 			fmt.Scan(&x)
+
+			if !possible {
+				// just continue
+				continue
+			}
 
 			// append item to deque first
 			deque = append(deque, x)
@@ -44,12 +50,12 @@ func main() {
 					if x < queue[queueLen - 1] {
 						fmt.Println("bad sequence for queue")
 						possible = false
-						break
+						continue
 					}
 				}
 
 				// if new entry is greater than the top, remove top
-				if deque[dequeLen- 1] > deque[dequeLen- 2] {
+				for dequeLen > 1 && deque[dequeLen- 1] > deque[dequeLen- 2] {
 
 					fmt.Println(deque[dequeLen - 1], "is greater than", deque[dequeLen - 2], "in", deque)
 					// move lower to queue
@@ -62,6 +68,15 @@ func main() {
 					dequeLen--
 					fmt.Println("deque is now updated to", deque, "with length", dequeLen)
 				}
+
+				// check deque
+				if dequeLen > 1 {
+					if deque[dequeLen - 1] > deque[dequeLen - 2] {
+						fmt.Println("bad sequence for deque", deque)
+						possible = false
+						continue
+					}
+				}
 			}
 
 			// check queue
@@ -71,7 +86,7 @@ func main() {
 					// invalid order
 					fmt.Println("invalid queue sequence... breaking")
 					possible = false
-					break
+					continue
 				}
 
 				fmt.Println("sequence is valid for queue", queue)
