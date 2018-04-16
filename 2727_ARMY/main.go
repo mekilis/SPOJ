@@ -4,7 +4,10 @@
 
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 func main() {
 	var T, NG, NM, x int
@@ -12,33 +15,28 @@ func main() {
 	fmt.Scanln(&T)
 
 	for t := 0; t < T; t++ {
-		var NGMAx, NMMax int
+		NGArr := make([]int, 0)
+		NMArr := make([]int, 0)
 		fmt.Scan()
 
 		fmt.Scan(&NG)
 		fmt.Scan(&NM)
 
-		if NG == 0 && NM == 0 {
-			fmt.Println("uncertain")
-			continue
-		}
-
 		for ng := 0; ng < NG; ng++ {
 			fmt.Scan(&x)
-			if x > NGMAx {
-				NGMAx = x
-			}
+			NGArr = append(NGArr, x)
 		}
 
 		for nm := 0; nm < NM; nm++ {
 			fmt.Scan(&x)
-			if x > NMMax {
-				NMMax = x
-			}
+			NMArr = append(NMArr, x)
 		}
 
+		sort.Ints(NMArr)
+		sort.Ints(NGArr)
+
 		// battle begins
-		if NMMax > NGMAx {
+		if NMArr[NM - 1] > NGArr[NG - 1] {
 			fmt.Println("MechaGodzilla")
 		} else {
 			fmt.Println("Godzilla")
