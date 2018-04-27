@@ -16,107 +16,79 @@ func (m MyRange) Len() int           { return len(m) }
 func (m MyRange) Swap(i, j int)      { m[i], m[j] = m[j], m[i] }
 func (m MyRange) Less(i, j int) bool { return m[i] < m[j] }
 
-/*func maximumProgramValue(n int32) int64 {
- */ /*
- * Write your code here.
- */ /*
-	reader := bufio.NewReader(os.Stdin)
-	var sum, max, num int32
-	var code string
-	fmt.Println("about to start iter")
-	for i := int32(0); i < n; i++ {
-		fmt.Println("scanning")
-		fmt.Fscan(reader, &code)
-		fmt.Scan(&num)
-		if code == "add" {
-			sum += num
-		} else if code == "set" {
-			sum = num
-		}
-		if sum > max {
-			max = sum
-		}
-	}
-	return int64(max)
-}*/
-
 func main() {
-	/*
 
-	type m struct {
-		Id int
-	}
+	var T uint64
+	var N, C int
 
-	permMap := make(map[string][]int)
-
-	permMap["hello"] = []int{1, 2, 3}
-
-	if _, ok := permMap["hello"]; ok {
-		fmt.Println("Exists")
-	}
-
-	if _, ok := permMap["hellox"]; ok {
-		fmt.Println("Exists")
-	} else {
-		fmt.Println("Not exists")
-	}
-	return
-	*/
-
-	/** HACKERRANK W37
-
-	ave := (93.443 + 93.445) / 2.0
-	baseAveFloat := ave + 0.001
-
-	baseAve := strconv.FormatFloat(baseAveFloat, 'f', 2, 64)
-	baseAveFloat, _ = strconv.ParseFloat(baseAve, 64)
-
-	baseAve = strconv.FormatFloat(baseAveFloat, 'f', 2, 64)
-	fmt.Println(baseAve)
-
-	return
-	**/
-
-	var N, C, T uint64
 	fmt.Scan(&T)
 
 	for t := uint64(0); t < T; t++ {
+
 		fmt.Scan(&N)
 		fmt.Scan(&C)
 
 		stalls := make(MyRange, 0)
-		var x uint64
-		for n := uint64(0); n < N; n++ {
+		var x, sum uint64
+		for n := 0; n < N; n++ {
 			fmt.Scan(&x)
+			//xx, _ := strconv.Atoi(Stalls[n])
+			//x = uint64(xx)
 			stalls = append(stalls, x)
+			sum += x
 		}
 
 		// sort array first
 		sort.Sort(stalls)
 
-		fmt.Println("stalls:", stalls)
+		//fmt.Println("stalls:", stalls)
 
-		p := stalls[N - 1] - stalls[0]
+		x = stalls[N-1] - stalls[0]
 
-		fmt.Println(binarySearch(stalls, N, p))
+		fmt.Println(binarySearch(stalls, N, C, x))
 	}
 }
 
-func binarySearch(A MyRange, n, x uint64) uint64 {
-	var p, q, r uint64
-	p, r = 0, n-1
+func binarySearch(stalls MyRange, N, C int, x uint64) uint64 {
+	var p, q, r, ctr uint64
 
-	for p <= r {
+	p, r = 1, x
+
+	//fmt.Println(p, r)
+
+	for p < r && ctr < 100 {
 		q = (p + r) / 2
+		//fmt.Println("p, q, r ==", p, q, r)
 
-		if A[q] == x {
-			return q
-		} else if A[q] > x {
-			r = q - 1
-		} else {
-			p = q + 1
+		cowsPlaced, current := 1, stalls[0]
+
+		for i := 1; i < N; i++ {
+			if cowPos := stalls[i] - current; cowPos < q {
+				//fmt.Println("not possible to place. current:", current, "next sum:", cowPos)
+			} else {
+				cowsPlaced++
+				current = stalls[i]
+				//fmt.Println("cow can be placed. next:", current, "cowsPlaced:", cowsPlaced)
+
+				if cowsPlaced == C {
+					//fmt.Println("equal")
+					break
+				}
+			}
 		}
+
+		if cowsPlaced < C {
+			r = q
+			//fmt.Println("less: r-", r)
+		} else {
+			p = q
+			//fmt.Println("more: p-", p)
+		}
+
+		ctr++
 	}
 
-	return 0
+	//fmt.Println(ctr, p - 1, r)
+
+	return p
 }
