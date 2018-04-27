@@ -13,5 +13,11 @@ func main() {
 
 	for t := 0; t < T; t++ {
 		fmt.Scan(&n)
+		f := n * (n + 2) * (2 * n + 1)
+		if n % 2 != 0 {
+			f--
+		}
+		f /= 8
+		fmt.Println(f)
 	}
 }
