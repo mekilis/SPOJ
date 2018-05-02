@@ -7,7 +7,8 @@ package main
 import "fmt"
 
 func main() {
-	var threeTerm, threeLastTerm, sum uint64 = 3, 8, 55
+	//var threeTerm, threeLastTerm, sum uint64 = 3, 8, 55
+	var threeTerm, threeLastTerm, sum uint64 = 10, 55, 650
 	var T = 1
 
 	fmt.Scan(&T)
@@ -16,42 +17,23 @@ func main() {
 		fmt.Scan(&threeLastTerm)
 		fmt.Scan(&sum)
 
-		var i, d uint64
-		i = 2
+		var d uint64
 		d = 1
-		summer := uint64(0)
-		first, second, next := uint64(0), uint64(0), uint64(0)
+
+		first, last := uint64(0), uint64(0)
 		var n uint64
 
 		for {
-			if i == 2 {
-				// sum first two terms
-				first = threeTerm - 2 * d
-				second = threeTerm - d
-				summer += first + second
-				i++
+			net := threeTerm + threeLastTerm
+			first = threeTerm - 2 * d
+			last = net - first
+			n = (net - first) / d
 
-				next = second
-				continue
-			}
-			next += d
-			summer += next
-
-			if summer == sum && first + (i - 3)*d == threeLastTerm {
-				n = i
+			if sum == (n / 2) * (first + last) {
 				break
 			}
 
-			if summer > sum {
-				// wrong guess for d
-				d++
-				// reset
-				i = 2
-				summer = 0
-				continue
-			}
-
-			i++
+			d++
 		}
 
 		fmt.Println(n)
