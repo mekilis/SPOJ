@@ -32,12 +32,10 @@ func main() {
 	}
 }
 
-func mergeSort(A []uint64, p, r int) int64 {
-	fmt.Println("mergeSort", A[p:r+1])
-	var counter int64 = 0
+func mergeSort(A []uint64, p, r int) uint64 {
+	var counter uint64 = 0
 
 	if p >= r {
-		fmt.Println("---base case---")
 		return counter
 	}
 
@@ -49,12 +47,11 @@ func mergeSort(A []uint64, p, r int) int64 {
 	return counter
 }
 
-func merge(A []uint64, p, q, r int) int64 {
-	fmt.Println("merging", A[p:r+1])
+func merge(A []uint64, p, q, r int) uint64 {
 	n1, n2 := q - p + 1, r - q
 	B := make([]uint64, n1+1)
 	C := make([]uint64, n2+1)
-	var counter int64
+	var counter uint64
 
 	for i := 0; i < n1; i++ {
 		B[i] = A[p + i]
@@ -68,26 +65,19 @@ func merge(A []uint64, p, q, r int) int64 {
 	B[n1] = inf
 	C[n2] = inf
 
-	fmt.Println("B:", B, "C:", C)
+	var i, j int
 
-	//var i, j int
+	for k := p; k <= r; k++ {
+		if B[i] <= C[j] {
+			A[k] = B[i]
+			i++
+		} else {
+			A[k] = C[j]
+			j++
 
-	//for k := p; k <= r; k++ {
-	//	if B[i] <= C[j] {
-	//		fmt.Println("less")
-	//		A[k] = B[i]
-	//		i++
-	//	} else {
-	//		fmt.Println("more")
-	//		A[k] = C[j]
-	//		j++
-	//		fmt.Println("q:", q, "q-1", q-1)
-	//		counter += int64(q)
-	//	}
-	//}
-	//fmt.Println("done merging", A[p:r+1])
-
-	// split into two halves instead
+			counter += uint64(n1 - i)
+		}
+	}
 
 	return counter
 }
