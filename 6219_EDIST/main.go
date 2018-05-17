@@ -9,7 +9,7 @@ import (
 	"math"
 )
 
-var lookup = make(map[string]int)
+//var lookup = make(map[string]int)
 
 func main() {
 
@@ -31,10 +31,10 @@ func main() {
 
 func eDist(A string, B string, i, j int) int {
 
-	key := fmt.Sprintf("%s+%s+%d+%d", A, B, i, j)
-	if val, ok := lookup[key]; ok {
-		return val
-	}
+	//key := fmt.Sprintf("%s+%s+%d+%d", A, B, i, j)
+	//if val, ok := lookup[key]; ok {
+	//	return val
+	//}
 
 	// d_i0 == delete
 	if i == 0 {
@@ -53,7 +53,8 @@ func eDist(A string, B string, i, j int) int {
 
 	// perform delete, insert and substitution here
 	minNum := 1 + min(eDist(A, B, i, j-1), eDist(A, B, i-1, j), eDist(A, B, i-1, j-1))
-	lookup[key] = minNum
+	//lookup[key] = minNum
+	//fmt.Println("map:", lookup, "minNun", minNum)
 
 	return minNum
 }
