@@ -6,10 +6,10 @@ package main
 
 import (
 	"fmt"
-	"math"
+	"unicode/utf8"
 )
 
-//var lookup = make(map[string]int)
+var lookup []int
 
 func main() {
 
@@ -21,46 +21,55 @@ func main() {
 		// assuming no spaces
 		fmt.Scanln(&A)
 		fmt.Scanln(&B)
+		lookup = make([]int, len(B)+1)
 
 		// using Levenshtein's algorithm
-		var n int = eDist(A, B, len(A), len(B))
+		var n = eDist(A, B)
 		fmt.Println(n)
 	}
 
 }
 
-func eDist(A string, B string, i, j int) int {
+// using a Non recursive (faster) solution
+func eDist(A, B string) int {
 
-	//key := fmt.Sprintf("%s+%s+%d+%d", A, B, i, j)
-	//if val, ok := lookup[key]; ok {
-	//	return val
-	//}
+	var minNum int
+	lookup = make([]int, utf8.RuneCountInString(B)+1)
 
-	// d_i0 == delete
-	if i == 0 {
-		return j
+	for i := range lookup {
+		lookup[i] = i
 	}
 
-	// d_0j insert
-	if j == 0 {
-		return i
+	// d_i*
+	for _, valA := range A {
+		j, temp := 1, lookup[0]
+		lookup[0]++
+
+		for _, valB := range B {
+			// delete, insert
+			minNum = min(lookup[j]+1, lookup[j-1]+1)
+
+			if valA != valB {
+				// substitute
+				minNum = min(minNum, temp+1)
+			} else {
+				// update
+				minNum = min(minNum, temp)
+			}
+
+			temp, lookup[j] = lookup[j], minNum
+			j++
+		}
 	}
 
-	// d_ij == depends on whether last char for both are same
-	if A[i-1] == B[j-1] {
-		return eDist(A, B, i-1, j-1)
-	}
-
-	// perform delete, insert and substitution here
-	minNum := 1 + min(eDist(A, B, i, j-1), eDist(A, B, i-1, j), eDist(A, B, i-1, j-1))
-	//lookup[key] = minNum
-	//fmt.Println("map:", lookup, "minNun", minNum)
-
-	return minNum
+	return lookup[len(lookup)-1]
 }
 
-func min(x, y, z int) int {
-	a, b, c := float64(x), float64(y), float64(z)
-	return int(math.Min(math.Min(a, b), c))
-}
+func min(x, y int) int {
 
+	if x <= y {
+		return x
+	}
+
+	return y
+}
