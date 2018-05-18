@@ -22,36 +22,13 @@ func main() {
 			greater, lesser = B, G
 		}
 
-		// code works well for G or B > 4
 		if G == 0 || B == 0 {
 			fmt.Println(G+B)
-		} else if G == 1 || B == 1 {
-
-			if greater % 2 != 0 {
-				// odd
-				greater++
-			}
-
-			fmt.Println(greater / 2)
-		} else if G == B {
-			fmt.Println(1)
 		} else {
-			ans := 2
-			// custom mid point
-			mid := greater / 2
-			if greater % 2 == 0 {
-				//even
-				mid--
-			}
-			// answer up to and including mid == 2
-			difference := mid - lesser
-			if difference > 0 {
-				ans += difference
-			} else {
-				// ans remains 2 except
-				if greater - lesser == 1 {
-					ans = 1
-				}
+
+			ans := greater / (lesser + 1)
+			if greater % (lesser + 1) > 0 {
+				ans++
 			}
 
 			fmt.Println(ans)
