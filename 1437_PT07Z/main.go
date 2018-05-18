@@ -8,7 +8,7 @@ import "fmt"
 
 var adj [][]int
 var dist []int
-var longest, node = 0, 0
+var farthest, maxDist = 0, 0
 
 func main() {
 	var N int // nodes
@@ -26,10 +26,15 @@ func main() {
 		adj[u] = append(adj[u], v)
 		adj[v] = append(adj[v], u)
 	}
-	fmt.Println("graph", adj)
-	longest = 0
+	//fmt.Println("graph", adj)
+
+	// working on globals
+	// get farthest node
 	dfs(N)
-	fmt.Println(longest)
+	// get farthest node again from node
+	dfs(farthest)
+
+	fmt.Println(maxDist)
 }
 
 func resetDistance() {
@@ -48,7 +53,7 @@ func dfs(n int) {
 	top++
 
 	// distance from node to itself
-	//dist[n] = 0
+	dist[n] = 0
 
 	var u, v int
 	for len(stack) != 0 {
@@ -58,10 +63,10 @@ func dfs(n int) {
 		top--
 
 		// catch same node here
-		if dist[u] == -1 {
-			fmt.Println("node", u, "has been visited. stack:", stack)
-			dist[u] = 0
-		}
+		//if dist[u] == -1 {
+		//	fmt.Println("node", u, "has been visited. stack:", stack)
+		//	dist[u] = 0
+		//}
 
 		for i := 0; i < len(adj[u]); i++ {
 
@@ -71,7 +76,7 @@ func dfs(n int) {
 			if dist[v] == -1 {
 				stack = append(stack, v)
 				top++
-				//dist[v] = dist[u] + 1
+				dist[v] = dist[u] + 1
 			}
 		}
 	}
@@ -83,7 +88,7 @@ func dfs(n int) {
 		}
 	}
 
-	fmt.Println("max and node", maxDistance, node)
+	//fmt.Println("max and node", maxDistance, node)
+	farthest, maxDist = node, maxDistance
 
 }
-//graph [[] [2 3] [1 4 5] [1] [2 6] [2 7] [4] [5]]
