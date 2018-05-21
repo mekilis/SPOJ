@@ -4,32 +4,37 @@
 
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 func main() {
-	var N, Pi, max int64
-	var lookup []int64
+	var N, Pi, buffer int64
 
-	fmt.Scan(&N)
-	lookup = make([]int64, 1000000001)
-	//fmt.Println("created lookup", lookup)
+	scanner := bufio.NewScanner(os.Stdin)
+
+	if scanner.Scan() {
+		N = toInt(scanner.Bytes())
+	}
 
 	for n := int64(1); n <= N; n++ {
-		fmt.Scan(&Pi)
-		lookup[Pi]++
-
-		if Pi > max {
-			max = Pi
-		}
+		scanner.Scan()
+		Pi = toInt(scanner.Bytes())
+		buffer ^= Pi
 	}
 
-	//fmt.Println(	"done scanning", lookup)
-
-	for n := int64(1); n <= max; n++ {
-		//fmt.Println("scanning")
-		if x := lookup[n]; x == 1 {
-			fmt.Println(n)
-			break
-		}
-	}
+	fmt.Println(buffer)
 }
+
+func toInt(buf []byte) int64 {
+	var n int64
+
+	for _, v := range buf {
+		n = n*10 + int64(v-'0')
+	}
+
+	return n
+}
+// 7888
