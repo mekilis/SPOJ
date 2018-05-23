@@ -18,23 +18,59 @@ func main() {
 	scanner.Split(bufio.ScanLines)
 
 	scanner.Scan()
-	N = toInt(scanner.Bytes())
+	var b []byte
+	b = scanner.Bytes()
+
+	for len(b) == 0 {
+		// next scan
+		scanner.Scan()
+		b = scanner.Bytes()
+	}
+
+	N = toInt(b)
 
 	for n = 0; n < N; n++ {
+
 		scanner.Scan()
-		x = toInt(scanner.Bytes())
+		b = scanner.Bytes()
+		for len(b) == 0 {
+			// next scan
+			scanner.Scan()
+			b = scanner.Bytes()
+		}
+
+		x = toInt(b)
 		list = append(list, x)
 	}
 
 	scanner.Scan()
-	M = toInt(scanner.Bytes())
+	b = scanner.Bytes()
+	for len(b) == 0 {
+		// next scan
+		scanner.Scan()
+		b = scanner.Bytes()
+	}
+
+	M = toInt(b)
 
 	for m = 0; m < M; m++ {
 		scanner.Scan()
-		i = toInt(scanner.Bytes())
+		b = scanner.Bytes()
+		for len(b) == 0 {
+			// next scan
+			scanner.Scan()
+			b = scanner.Bytes()
+		}
+		i = toInt(b)
 
 		scanner.Scan()
-		j = toInt(scanner.Bytes())
+		b = scanner.Bytes()
+		for len(b) == 0 {
+			// next scan
+			scanner.Scan()
+			b = scanner.Bytes()
+		}
+		j = toInt(b)
 
 		//fmt.Println("M", i, j, list)
 		_, _, max := findMaximumSubarray(list, i-1, j-1)
@@ -91,6 +127,7 @@ func findMaximumCrossingSubarray(A []int64, low, mid, high int64) (int64, int64,
 	var leftSum, rightSum, sum, maxLeft, maxRight int64
 
 	leftSum = -1 << 63
+	sum = 0
 	for i := mid; i >= low; i-- {
 		sum += A[i]
 		if sum > leftSum {
