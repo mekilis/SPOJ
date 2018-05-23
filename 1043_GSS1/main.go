@@ -36,7 +36,9 @@ func main() {
 		scanner.Scan()
 		j = toInt(scanner.Bytes())
 
-		fmt.Println("M", i, j, list)
+		//fmt.Println("M", i, j, list)
+		_, _, max := findMaximumSubarray(list, i-1, j-1)
+		fmt.Println(max)
 	}
 }
 
@@ -58,4 +60,54 @@ func toInt(buf []byte) int64 {
 	}
 
 	return n
+}
+
+func findMaximumSubarray(A []int64, low, high int64) (int64, int64, int64) {
+	if high == low {
+		return low, high, A[low]
+	} else {
+
+		var leftLow, leftHigh, leftSum int64
+		var rightLow, righttHigh, rightSum int64
+		var crossLow, crossHigh, crossSum int64
+
+		mid := (low + high) / 2
+		leftLow, leftHigh, leftSum = findMaximumSubarray(A, low, mid)
+		rightLow, righttHigh, rightSum = findMaximumSubarray(A, mid + 1, high)
+		crossLow, crossHigh, crossSum = findMaximumCrossingSubarray(A, low, mid, high)
+
+		if leftSum >= rightSum && leftSum >= crossSum {
+			return leftLow, leftHigh, leftSum
+		} else if rightSum >= leftSum && rightSum >= crossSum {
+			return rightLow, righttHigh, rightSum
+		}
+
+		return crossLow, crossHigh, crossSum
+	}
+}
+
+func findMaximumCrossingSubarray(A []int64, low, mid, high int64) (int64, int64, int64) {
+
+	var leftSum, rightSum, sum, maxLeft, maxRight int64
+
+	leftSum = -1 << 63
+	for i := mid; i >= low; i-- {
+		sum += A[i]
+		if sum > leftSum {
+			leftSum = sum
+			maxLeft = i
+		}
+	}
+
+	rightSum = -1 << 63
+	sum = 0
+	for j := mid+1; j <= high; j++ {
+		sum += A[j]
+		if sum > rightSum {
+			rightSum = sum
+			maxRight = j
+		}
+	}
+
+	return maxLeft, maxRight, leftSum + rightSum
 }
