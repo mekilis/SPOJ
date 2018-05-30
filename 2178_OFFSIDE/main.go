@@ -37,11 +37,7 @@ func main() {
 		sort.Ints(attackers)
 		sort.Ints(defenders)
 
-		if attackers[0] == defenders[0] {
-			if attackers[0] != defenders[1] {
-				offside = true
-			}
-		} else if attackers[0] < defenders[0] {
+		if attackers[0] < defenders[1] {
 			offside = true
 		}
 
@@ -51,9 +47,13 @@ func main() {
 			fmt.Println("N")
 		}
 
+		// cost me 2WAs
+		attackers = make([]int, 0)
+		defenders = make([]int, 0)
+
 		fmt.Scan(&A)
 		fmt.Scanln(&D)
 	}
 }
 
-// WA
+// WA x2
