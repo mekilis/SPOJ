@@ -6,7 +6,6 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
 func main() {
@@ -19,44 +18,35 @@ func main() {
 		fmt.Scan(&S)
 
 		l := len(S)
-		count := findMinimum(S, 0, l-1)
+		count := findMinimum(S, 0, l)
 		fmt.Println(count)
 	}
 }
 
-var lookup = make(map[string]int)
+var lookup [][]int
 
-func findMinimum(S string, l, h int) int {
-	key := S[l : h+1]
-	if v, ok := lookup[key]; ok {
-		//fmt.Println("solved before", key, v)
-		return v
-	}
-	if l > h {
-		return math.MaxInt32
+func findMinimum(S string, l, G int) int {
+
+	lookup = make([][]int, 0)
+	for g := 0; g < G; g++ {
+		lookup = append(lookup, make([]int, G))
 	}
 
-	if l == h {
-		return 0
-	}
-
-	if l == h-1 {
-		if S[l] == S[h] {
-			return 0
+	// fill table
+	for g := 1; g < G; {
+		for l, h := 0, g; h < G; {
+			if S[l] == S[h] {
+				lookup[l][h] = lookup[l+1][h-1]
+			} else {
+				lookup[l][h] = min(lookup[l][h-1], lookup[l+1][h]) + 1
+			}
+			l++
+			h++
 		}
-		return 1
+		g++
 	}
 
-	minimum := 0
-
-	if S[l] == S[h] {
-		minimum = findMinimum(S, l+1, h-1)
-	} else {
-		minimum = min(findMinimum(S, l, h-1), findMinimum(S, l+1, h)) + 1
-	}
-
-	lookup[key] = minimum
-	return minimum
+	return lookup[0][G-1]
 }
 
 func min(x, y int) (z int) {
